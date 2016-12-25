@@ -29,7 +29,7 @@ chrome.tabs.query({}, tabs => {
     if(tab.active && !tab.url.startsWith('chrome://')) {
       chrome.tabs.reload(tab.id);
     }
-  })
-})
+  });
+});
 
 

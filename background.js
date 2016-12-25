@@ -14,13 +14,29 @@ function getLocation(href) {
 }
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  if (changeInfo.status === 'complete') {
-    var match = getLocation(tab.url);
+  var match = getLocation(tab.url);
+
+  // load css early for no visible delays
+  if(changeInfo.status === 'loading') {
+    
+    // attempt to insert domain specific css
+    chrome.tabs.insertCSS(tabId, {
+      file: 'chromedotfiles/default.css',
+      runAt: 'document_start',
+      allFrames: true
+    }, function (res) {
+      if (chrome.runtime.lastError) {
+        // file not found, fail silently
+        return;
+      }
+    });
 
     if (match) {
       // attempt to insert domain specific css
       chrome.tabs.insertCSS(tabId, {
-        file: 'chromedotfiles/' + match.hostname + '.css'
+        file: 'chromedotfiles/' + match.hostname + '.css',
+        runAt: 'document_start',
+        allFrames: true
       }, function(res) {
         if (chrome.runtime.lastError) {
           // file not found, fail silently
@@ -28,29 +44,12 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
         }
       });
     }
-
-    // attempt to insert domain specific css
-    chrome.tabs.insertCSS(tabId, {
-      file: 'chromedotfiles/default.css'
-    }, function (res) {
-      if (chrome.runtime.lastError) {
-        // file not found, fail silently
-        return;
-      }
-    });
+  }
+  
+  
+  if (changeInfo.status === 'complete') {
     
     // attempt to execute default js
-    chrome.tabs.executeScript(tabId, {
-      file: 'chromedotfiles/default.js'
-    }, function(res) {
-      if (chrome.runtime.lastError) {
-        // file not found, fail silently
-        return;
-      }
-    });
-
-
-    // attempt to execute default css
     chrome.tabs.executeScript(tabId, {
       file: 'chromedotfiles/default.js'
     }, function(res) {
