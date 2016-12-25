@@ -55,13 +55,45 @@ If there is a `default.js` file in the `chromedotfiles` directory it will be inj
 domain. This could be used to inject jquery (or any other js) into every site.
 
 
+To load multiple JS files:
+
+```
+loadJS('vendor/jquery.js');
+loadJS('vendor/underscore.js');
+
+// waiting for callback
+loadJS('vendor/jquery.js', "callback");
+function callback() {}
+
+
+// waiting for callback and preventing conflicts
+loadJS('vendor/jquery.js', 'Mine.callback');
+window.Mine = {
+  callback: function() {
+    console.log('ff c');
+  }
+};
+
+```
+
+
+
 ### Differences from [dotjs](https://github.com/defunkt/dotjs)
 
 - only works in Google Chrome
 - loads css as well as javascript
 - css and js are injected into the page via the [tabs api](https://developer.chrome.com/extensions/tabs), no ajax calls and script evaluation is made
 - jquery is not inserted anywhere (but see note about `default.js` if you want this)
+- better file management using `loadJS` function (view chromedotfiles-example)
 
+
+
+### Differences from [punkjs](https://github.com/kudos/punkjs)
+
+- does not require an app 
+- loads css as well as javascript
+- js is not evaluated. Files are injected instead making debugging much easier. 
+- better file management using `loadJS` function (view chromedotfiles-example)
 
 ---
 
@@ -80,7 +112,7 @@ wf eslint .
 # start file watcher. make changes and extension auto reloads
 ./scripts/watch.sh
 
-# link custom directory into extension
+# link custom directory into extension e.g 
 cd /home/hassen/workspace/chromedotfiles
 ln -s ~/.js chromedotfiles
 

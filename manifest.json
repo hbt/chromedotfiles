@@ -4,9 +4,22 @@
   "version": "0.0.1",
   "description": "inject ~/.chromedotfiles/<domain>.{js,css} into chrome tabs",
   "icons": {
-     "128": "icon-128.png",
-     "48": "icon-48.png"
+    "128": "icon-128.png",
+    "48": "icon-48.png"
   },
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "run_at": "document_start",
+      "js": [
+        "frontend.js",
+        "port.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
   "permissions": [
     "http://*/",
     "https://*/",
@@ -15,6 +28,10 @@
   ],
   "background": {
     "persistent": false,
-    "scripts": ["background.js", "extension-reloader.js"]
+    "scripts": [
+      "background.js",
+      "extension-reloader.js",
+      "port.js"
+    ]
   }
 }

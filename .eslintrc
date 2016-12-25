@@ -7,7 +7,7 @@
     "quotes": [1, "single"],
     "strict": [2, "global"],
     "eqeqeq": 2,
-    "no-unused-vars": [2, {"vars": "all", "args": "none"}],
+    "no-unused-vars": 0,
     "consistent-this": [2, "self"],
     "consistent-return": 0,
     "no-use-before-define": [2, "nofunc"],
@@ -20,7 +20,8 @@
     "semi": [2, "always"]
   },
   "globals": {
-    "chrome": true
+    "chrome": true,
+    "Post": true
   },
   "env":{
     "browser": true,

@@ -72,3 +72,25 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
     }
   }
 });
+
+function loadJS(filepath, callbackFunctionName, tab) {
+
+  chrome.tabs.executeScript(tab.id, {
+    file: 'chromedotfiles/' + filepath
+  }, function (res) {
+
+    var port = chrome.tabs.connect(tab.id, {});
+    if (chrome.runtime.lastError) {
+
+      port.postMessage({
+        action: 'console.error',
+        args: chrome.runtime.lastError
+      });
+    }    else    {
+      port.postMessage({
+        action: callbackFunctionName
+      });     
+    }
+
+  });
+}
