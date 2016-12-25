@@ -66,3 +66,19 @@ domain. This could be used to inject jquery (or any other js) into every site.
 ---
 
 Chrome dotfiles logo designed by [Daniel Garrett Hickey](http://thenounproject.com/daniel.g.hickey) from the [Noun Project](http://thenounproject.com/) :: Creative Commons – Attribution (CC BY 3.0)
+
+
+## How to contribute?
+
+```
+# watch files for JS errors
+sudo npm install -g eslint
+wf eslint . 
+
+# autoreload extension on file changes
+# uncomment extension-reloader.js:25
+# start file watcher. make changes and extension auto reloads
+./scripts/watch.sh
+
+
+```
