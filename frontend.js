@@ -3,7 +3,7 @@
 
 function loadJS(filepath, callbackFunctionName) {
   Post({
-    action: 'loadJS',
+    action: 'loadJSFiles',
     args: arguments
   });
 }  

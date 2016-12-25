@@ -73,24 +73,47 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   }
 });
 
-function loadJS(filepath, callbackFunctionName, tab) {
+/**
+ * simulates loading JS files in order passed in array and in sync mode instead of async
+ * 
+ * @param tabId
+ * @param files
+ * @param callbackFunctionName
+ */
+function loadJSFile(tabId, files, callbackFunctionName) {
+  var port = chrome.tabs.connect(tabId, {});
 
-  chrome.tabs.executeScript(tab.id, {
-    file: 'chromedotfiles/' + filepath
-  }, function (res) {
+  if (files.length === 0) {
+    port.postMessage({
+      action: callbackFunctionName
+    });
 
-    var port = chrome.tabs.connect(tab.id, {});
+    // exit recursion
+    return;
+  }
+
+  var nfiles = files;
+  var filename = nfiles.shift();
+  chrome.tabs.executeScript(tabId, {
+    file: 'chromedotfiles/' + filename
+  }, res => {
     if (chrome.runtime.lastError) {
-
       port.postMessage({
         action: 'console.error',
         args: chrome.runtime.lastError
       });
-    }    else    {
-      port.postMessage({
-        action: callbackFunctionName
-      });     
     }
 
+    loadJSFile(tabId, nfiles, callbackFunctionName);
   });
+}
+
+function loadJSFiles(filepath, callbackFunctionName, tab) {
+
+  var files = filepath;
+  if(!(filepath instanceof Array)) {
+    files = [filepath];
+  }
+  
+  loadJSFile(tab.id, files, callbackFunctionName);
 }

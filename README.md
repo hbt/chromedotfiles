@@ -58,19 +58,18 @@ domain. This could be used to inject jquery (or any other js) into every site.
 To load multiple JS files:
 
 ```
-loadJS('vendor/jquery.js');
-loadJS('vendor/underscore.js');
+// load dependencies in that exact order
+loadJS(['vendor/jquery.js', 'vendor/jquery-time-ago.js', 'vendor/underscore.js']);
 
-// waiting for callback
+// load and execute my callback
 loadJS('vendor/jquery.js', "callback");
 function callback() {}
 
 
-// waiting for callback and preventing conflicts
-loadJS('vendor/jquery.js', 'Mine.callback');
-window.Mine = {
+// load and execute my callback in namespace
+loadJS('vendor/jquery.js', 'App.callback');
+var App = {
   callback: function() {
-    console.log('ff c');
   }
 };
 
