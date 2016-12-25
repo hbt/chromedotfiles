@@ -1,1 +1,2 @@
-asd
+file last modification date is used to reload extension
+controlled by ./scripts/watch.sh

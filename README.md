@@ -80,5 +80,9 @@ wf eslint .
 # start file watcher. make changes and extension auto reloads
 ./scripts/watch.sh
 
+# link custom directory into extension
+cd /home/hassen/workspace/chromedotfiles
+ln -s ~/.js chromedotfiles
+
 
 ```
