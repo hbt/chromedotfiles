@@ -29,7 +29,28 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
       });
     }
 
+    // attempt to insert domain specific css
+    chrome.tabs.insertCSS(tabId, {
+      file: 'chromedotfiles/default.css'
+    }, function (res) {
+      if (chrome.runtime.lastError) {
+        // file not found, fail silently
+        return;
+      }
+    });
+    
     // attempt to execute default js
+    chrome.tabs.executeScript(tabId, {
+      file: 'chromedotfiles/default.js'
+    }, function(res) {
+      if (chrome.runtime.lastError) {
+        // file not found, fail silently
+        return;
+      }
+    });
+
+
+    // attempt to execute default css
     chrome.tabs.executeScript(tabId, {
       file: 'chromedotfiles/default.js'
     }, function(res) {
