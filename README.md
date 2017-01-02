@@ -1,3 +1,53 @@
+## What this fork does?
+
+- added default.css
+
+works the same as default.js
+
+- loading css earlier 
+
+CSS is now applied instantaneously. No more visible delay. 
+
+- added support to load multiple JS files
+
+can now organize your files and load vendors without having everything meshed into one file.
+
+Example:
+
+```
+// load dependencies in that exact order
+loadJS(['vendor/jquery.js', 'vendor/jquery-time-ago.js', 'vendor/underscore.js']);
+
+// load and execute my callback
+loadJS('vendor/jquery.js', "callback");
+function callback() {}
+
+
+// load and execute my callback in namespace
+loadJS('vendor/jquery.js', 'App.callback');
+var App = {
+  callback: function() {
+  }
+};
+
+```
+
+
+- added example chromedotfiles directory 
+
+- added support for injecting css in chrome:// pages
+enable by turning flag in chrome://flags/#extensions-on-chrome-urls
+modify chrome.css
+
+- added instructions in readme (view below)
+
+
+============================================================================================================
+
+
+
+
+
 # [![Chrome dotfiles](https://raw.githubusercontent.com/diffsky/chromedotfiles/master/icon-64.png)](https://github.com/diffsky/chromedotfiles) Chrome dotfiles
 
 Google Chrome Browser Extension to inject per domain js and css into tabs.

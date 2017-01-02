@@ -16,7 +16,7 @@
         "port.js"
       ],
       "matches": [
-        "<all_urls>"
+        "<all_urls>", "chrome://*/*"
       ]
     }
   ],
@@ -33,5 +33,9 @@
       "extension-reloader.js",
       "port.js"
     ]
-  }
+  },
+  "web_accessible_resources": [
+    "chromedotfiles/*.css",
+    "chromedotfiles/*.js"
+  ]
 }
