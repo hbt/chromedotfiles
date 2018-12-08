@@ -91,6 +91,9 @@ function injectCSS(tabId, match) {
 function main() {
   listenShortcutReloadExtensionOnDemand()
   chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+    if(tab.url.startsWith('chrome')) {
+      return;
+    }
     var match = getLocation(tab.url);
 
     if (changeInfo.status === 'loading') {
