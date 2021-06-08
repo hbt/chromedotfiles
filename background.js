@@ -36,46 +36,79 @@ function injectJS(tabId, match) {
   });
 
   if (match) {
+    
     // attempt to execute domain specific js
-    chrome.tabs.executeScript(tabId, {
-      file: 'chromedotfiles/' + match.hostname + '.js'
-    }, function (res) {
-      if (chrome.runtime.lastError) {
-        // file not found, fail silently
-        return;
-      }
-    });
+    
+    let filenames = generatePossibleFilenamesFromHostname(match.hostname)
+
+    for (let filename of filenames) {
+      let curl = 'chromedotfiles/' + filename + '.js'
+      console.log(curl)
+      chrome.tabs.executeScript(tabId, {
+        file: curl,
+      }, function (res) {
+        if (chrome.runtime.lastError) {
+          // file not found, fail silently
+          return;
+        }
+      });
+    }
   }
+}
+
+function generatePossibleFilenamesFromHostname(hostname) {
+  console.log(hostname)
+
+  let filenames = []
+  let parts = hostname.split(".")
+  parts = parts.reverse()
+  let nfile = ""
+  for (let p of parts) {
+    nfile = p + "." + nfile
+    if (nfile.endsWith(".")) {
+      nfile = nfile.substring(0, nfile.length - 1)
+    }
+    filenames.push(nfile)
+  }
+
+  filenames = filenames.reverse()
+  filenames = _.unique(filenames)
+  
+  return filenames
 }
 
 function injectCSS(tabId, match) {
 
   function injectCSSFile(tabId, filename) {
 
-    let curl = chrome.runtime.getURL(`chromedotfiles/${filename}.css`)
-    try {
-      $.ajax({
-        url: curl
-      }).done(function (data) {
-        if (data) {
-          chrome.tabs.insertCSS(
-            tabId,
-            {
-              code: data,
-              runAt: "document_start",
-              allFrames: true
-            },
-            function (res) {
-            }
-          );
-        }
-      }).error(function() {
-        
-      });
-    } catch(e) {
-      
+    let filenames = generatePossibleFilenamesFromHostname(filename)
+
+    for (let filename of filenames) {
+      let curl = chrome.runtime.getURL(`chromedotfiles/${filename}.css`)
+      try {
+        $.ajax({
+          url: curl
+        }).done(function (data) {
+          if (data) {
+            chrome.tabs.insertCSS(
+              tabId,
+              {
+                code: data,
+                runAt: "document_start",
+                allFrames: true
+              },
+              function (res) {
+              }
+            );
+          }
+        }).error(function () {
+
+        });
+      } catch (e) {
+
+      }
     }
-    
+
 
   }
 
@@ -91,7 +124,7 @@ function injectCSS(tabId, match) {
 function main() {
   listenShortcutReloadExtensionOnDemand()
   chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-    if(tab.url.startsWith('chrome')) {
+    if (tab.url.startsWith('chrome')) {
       return;
     }
     var match = getLocation(tab.url);

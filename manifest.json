@@ -16,8 +16,7 @@
         "port.js"
       ],
       "matches": [
-        "<all_urls>",
-        "chrome://*/*"
+        "<all_urls>"
       ]
     }
   ],
@@ -31,6 +30,7 @@
     "persistent": false,
     "scripts": [
       "libs/jquery-3.3.1.min.js",
+      "libs/underscore-umd.js",
       "background.js",
       "extension-reloader.js",
       "port.js"
